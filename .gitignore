@@ -1,0 +1,9 @@
+results/
+logs/
+resources/
+.snakemake/
+*.fastq.gz
+*.fq.gz
+*.bam
+*.bai
+.cache/
