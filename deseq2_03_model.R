@@ -276,7 +276,8 @@ fit_level <- function(cts, ann, coldata, level_dir, level_lab) {
         ggplot2::aes(PC1, PC2, color=condition, shape=.data[[shape_var]])
       else ggplot2::aes(PC1, PC2, color=condition)
       gg <- ggplot2::ggplot(dat, aes_use) + ggplot2::geom_point(size=4) +
-        ggplot2::xlab(paste0("PC1: ", pv[1], "% var")) + ggplot2::ylab(paste0("PC2: ", pv[2], "% var")) +
+        ggplot2::xlab(paste0("PC1: ", round(100 * attr(dat, "percentVar"))[1], "% var")) +
+        ggplot2::ylab(paste0("PC2: ", round(100 * attr(dat, "percentVar"))[2], "% var")) +
         ggplot2::scale_x_continuous(expand=ggplot2::expansion(mult=0.18)) +
         ggplot2::theme_bw() + ggplot2::ggtitle(ttl)
       # coord_fixed() dropped on purpose: with PC1 ~96% vs PC2 ~3% it squashes the
@@ -302,7 +303,7 @@ fit_level <- function(cts, ann, coldata, level_dir, level_lab) {
       io$gg(fname, gg)
     } else io$base(fname, function() {
       plot(dat$PC1, dat$PC2, col=as.integer(factor(dat$condition)), pch=19,
-           xlab=paste0("PC1: ",pv[1],"%"), ylab=paste0("PC2: ",pv[2],"%"), main=ttl)
+           xlab=paste0("PC1: ", round(100 * attr(dat, "percentVar"))[1], "%"), ylab=paste0("PC2: ", round(100 * attr(dat, "percentVar"))[2], "%"), main=ttl)
       text(dat$PC1, dat$PC2, dat$name, pos=3, cex=.6) })
   }
   draw_pca(pca, paste0("PCA (", qc_lab, ")"), "11_pca")

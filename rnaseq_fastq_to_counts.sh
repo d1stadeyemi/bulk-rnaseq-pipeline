@@ -655,7 +655,7 @@ fi
 # 2. STAR alignment -> coordinate-sorted BAM (no intermediate SAM)
 # ---------------------------------------------------------------------------
 echo ">> [2/6] STAR alignment"
-module load star/2.7.6a
+command -v STAR >/dev/null 2>&1 || module load star/2.7.6a
 STAR_ARGS=( --runThreadN "${THREADS}"
             --genomeDir "${GENOME_DIR}"
             --readFilesIn "${Trim1}" "${Trim2}"
@@ -679,7 +679,7 @@ mv "${StarPrefix}Aligned.sortedByCoord.out.bam" "${SortedBam}"
 # 3. Index
 # ---------------------------------------------------------------------------
 echo ">> [3/6] index BAM"
-module load samtools/1.16.1-gcc
+command -v samtools >/dev/null 2>&1 || module load samtools/1.16.1-gcc
 samtools index -@ "${THREADS}" "${SortedBam}"
 
 star_stat() {   # star_stat "<label substring>"  -> trimmed value or NA
@@ -711,9 +711,13 @@ samtools view -@ "${THREADS}" -s 42.02 -b "${SortedBam}" > "${SubBam}"
 [[ -s "${SubBam}" ]] || { echo "ERROR: strand-check subsample is empty: ${SubBam}"; exit 1; }
 
 # NOW switch environments for featureCounts.
-module purge
-module load anaconda3/2024.06
-source "$ANACONDA3_SH"
+if [[ -z "${PIPELINE_SKIP_MODULES:-}" ]]; then
+    module purge
+    module load anaconda3/2024.06
+    source "$ANACONDA3_SH"
+else
+    eval "$(conda shell.bash hook)"
+fi
 unset PYTHONPATH
 export PYTHONNOUSERSITE=1
 conda activate "${CONDA_ENV_SUBREAD}"

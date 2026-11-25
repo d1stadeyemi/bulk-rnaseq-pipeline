@@ -15,14 +15,14 @@ set -euo pipefail
 #  ==========================================================================
 #   samples_manifest.tsv      written at SUBMIT time: replicate -> sample, R1, R2
 #   samplesheet.csv           written at COLLECT time. THIS is what you hand to
-#                             rnaseq_deseq2_dge.R via --samplesheet.
+#                             submit_rnaseq_deseq2_dge.sh via --samplesheet.
 #   sample_qc_summary.tsv     every QC column from every sample, one row each
 #   SAMPLESHEET_README.txt    what to edit and what each column means
 #
 #  samplesheet.csv columns
 #  -----------------------
 #    sample        replicate name = the per-sample output directory name.
-#                  rnaseq_deseq2_dge.R resolves count files from this.
+#                  submit_rnaseq_deseq2_dge.sh resolves count files from this.
 #    condition     GUESSED by stripping the --rep-keyword token from `sample`
 #                  (Parental_rep1 -> Parental). *** ALWAYS CHECK THIS ***
 #                  Sanitised to [A-Za-z0-9._] because DESeq2 factor levels may
@@ -39,7 +39,7 @@ set -euo pipefail
 #    ... plus every QC column: raw_reads, pct_surviving_trim, pct_uniq_mapped,
 #        pct_too_short, assigned_fragments, pct_assigned, features_detected,
 #        strand_verdict, stranded_used, ...
-#    Extra columns are harmless: rnaseq_deseq2_dge.R requires only `sample` and
+#    Extra columns are harmless: submit_rnaseq_deseq2_dge.sh requires only `sample` and
 #    `condition` and carries the rest through untouched.
 #
 #  ==========================================================================
